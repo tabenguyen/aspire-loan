@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class LoanTerm extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['apr', 'length', 'fee', 'interest_type'];
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableLoanTerms extends Migration
+class CreateTransactions extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateTableLoanTerms extends Migration
      */
     public function up()
     {
-        Schema::create('loan_terms', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->integer('apr')->comment('Annual percentage rate per year');
-            $table->integer('length')->comment('Length by weeks');
-            $table->integer('interest_type')->comment('Interest type');
-            $table->integer('fee')->comment('Loan fee');
+            $table->integer('user_id')->unsigned();
+            $table->morphs('target');
+            $table->integer('target_before');
+            $table->integer('amount');
+            $table->integer('target_after');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateTableLoanTerms extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('loan_terms');
+        Schema::dropIfExists('transactions');
     }
 }
