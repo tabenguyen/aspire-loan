@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticateController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\LoanTermController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
-
 Route::post('login', [AuthenticateController::class, 'login'])->name('login');
-Route::middleware('auth:sanctum')->get('me', [AuthenticateController::class, 'me'])->name('user.me');
+
+Route::prefix('/')->middleware('auth:sanctum')->group(function() {
+    Route::get('me', [AuthenticateController::class, 'me'])->name('api.user.me');
+    Route::prefix('loan-terms')->group(function() {
+        Route::get('/', [LoanTermController::class, 'index'])->name('api.loan-terms.index');
+        Route::post('/', [LoanTermController::class, 'store'])->name('api.loan-terms.store');
+    });
+});
