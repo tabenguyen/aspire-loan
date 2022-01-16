@@ -20,6 +20,7 @@ class CreateTransactions extends Migration
             $table->integer('target_before');
             $table->integer('amount');
             $table->integer('target_after');
+            $table->string('type', 10);
             $table->timestamps();
         });
     }
