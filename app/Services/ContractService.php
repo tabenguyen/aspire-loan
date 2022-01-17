@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Log;
 
 class ContractService
 {
+    /**
+     * Get processor base on type of interest
+     *
+     * @param Contract $contract
+     * @return InterestRepayment
+     */
     public function getInterestProcess(Contract $contract): InterestRepayment
     {
         if ($contract->loanTerm->interest_type == LoanTerm::INTEREST_TYPE_AMOR ) {
@@ -26,6 +32,15 @@ class ContractService
         }
     }
 
+    /**
+     * User apply to an loan term
+     *
+     * @param integer $userId
+     * @param integer $loanTermId
+     * @param integer $amount
+     * @param Carbon $startDate
+     * @return void
+     */
     public function apply(int $userId, int $loanTermId, int $amount, Carbon $startDate)
     {
         try {
@@ -38,11 +53,18 @@ class ContractService
             ]);
             return $contract;
         } catch (\Exception $ex) {
-            Log::error($ex); 
+            Log::error($ex);
             return null;
         }
     }
 
+    /**
+     * Retreive current status of a contract
+     *
+     * @param Contract $contract
+     * @param Carbon $to
+     * @return void
+     */
     public function getCurrentStatus(Contract $contract, Carbon $to)
     {
         $debt = $contract->amount - $contract->transactions()->sum('amount');
