@@ -32,7 +32,7 @@ Route::group(['prefix' => '/', 'middleware' => 'auth:sanctum'],function() {
         Route::get('/{contract}', [ContractController::class, 'detail'])->name('api.user.me.detail');
         Route::get('/{contract}/status', [ContractController::class, 'status'])->name('api.user.me.status');
         Route::get('/{contract}/repayments', [ContractController::class, 'repayments'])->name('api.user.me.repayments');
-        Route::put('/{contract}/pay', [ContractController::class, 'pay'])->name('api.user.me.pay');
+        Route::post('/{contract}/pay', [ContractController::class, 'pay'])->name('api.user.me.pay');
     });
 
 });
