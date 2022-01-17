@@ -2,16 +2,20 @@
 
 namespace App\Services;
 
+use App\Exceptions\TransactionException;
 use App\Http\Requests\CreateLoanTermRequest;
 use App\Models\Contract;
 use App\Models\LoanTerm;
+use App\Models\Repayment;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Virtuals\ContractStatus;
 use App\Services\Contract\AmortizedLoanInterest;
 use App\Services\Contract\InterestRepayment;
 use App\Services\Contract\NonAmortizedLoanInterest;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ContractService
@@ -39,7 +43,7 @@ class ContractService
      * @param integer $loanTermId
      * @param integer $amount
      * @param Carbon $startDate
-     * @return void
+     * @return Contract|null
      */
     public function apply(int $userId, int $loanTermId, int $amount, Carbon $startDate)
     {
@@ -63,18 +67,88 @@ class ContractService
      *
      * @param Contract $contract
      * @param Carbon $to
-     * @return void
+     * @return ContractStatus
      */
-    public function getCurrentStatus(Contract $contract, Carbon $to)
+    public function getContractStatus(Contract $contract, Carbon $to): ContractStatus
     {
-        $debt = $contract->amount - $contract->transactions()->sum('amount');
-        $fee = $contract->loanTerm->fee - $contract->transactions()->where('type', Transaction::TYPE_FEE)->sum('amount');
+        $debt = $contract->getBalance();
+        $fee = $contract->loanTerm->fee - $contract->sumTransaction(Transaction::TYPE_FEE);
         $interest = $this->getInterestProcess($contract)->estimateAmount($contract, $to);
-        return [
-            'weekNo' => $to->diffInWeeks($contract->start_date),
-            'debtAmount' => $debt,
-            'fee' => $fee,
-            'interest' => $interest
-        ];
+        $status = new ContractStatus();
+        $status->setDebtAmount($debt);
+        $status->setRepaymentAmount($contract->getRepaymentAmount());
+        $status->setFee($fee);
+        $status->setInterest($interest);
+
+        return $status;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Contract $contract
+     * @param User $user
+     * @param integer $amount
+     * @throws TransactionException
+     * @return Repayment|bool
+     */
+    public function submitRepayment(Contract $contract, User $user, int $amount)
+    {
+        $contractStatus = $this->getContractStatus($contract, Carbon::now());
+        if ($contractStatus->validateAmount($amount)) {
+            try {
+                DB::beginTransaction();
+                $repayment = Repayment::create([
+                    'user_id' => $user->id,
+                    'contract_id' => $contract->id,
+                    'amount' => $amount,
+                    'target_before' => $contract->getBalance(),
+                    'target_after' => $contract->getBalance() - $contractStatus->getRepaymentAmount(),
+                ]);
+                // Create fee transation
+                if ($contractStatus->getFee() > 0) {
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'target_id' => $repayment->id,
+                        'target_type' => Repayment::class,
+                        'amount' => $contractStatus->getFee(),
+                        'type' => Transaction::TYPE_FEE,
+                        'target_before' => 0,
+                        'target_after' => 0,
+                    ]);
+                }
+                // Create repayment transaction
+                if ($contractStatus->getRepaymentAmount() > 0) {
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'target_id' => $repayment->id,
+                        'target_type' => Repayment::class,
+                        'amount' => $contractStatus->getRepaymentAmount(),
+                        'type' => Transaction::TYPE_REPAYMENT,
+                        'target_before' => 0,
+                        'target_after' => 0,
+                    ]);
+                }
+                // Create interest transaction
+                if ($contractStatus->getInterest() > 0) {
+                    Transaction::create([
+                        'user_id' => $user->id,
+                        'target_id' => $repayment->id,
+                        'target_type' => Repayment::class,
+                        'amount' => $contractStatus->getInterest(),
+                        'type' => Transaction::TYPE_INTEREST,
+                        'target_before' => 0,
+                        'target_after' => 0,
+                    ]);
+                }
+                DB::commit();
+
+                return $repayment;
+            } catch(\Exception $ex) {
+                DB::rollBack();
+                throw new TransactionException('Repayment can not be created. [' . $ex->getMessage() .']');
+            }
+        }
+        return false;
     }
 }

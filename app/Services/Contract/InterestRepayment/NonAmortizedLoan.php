@@ -10,9 +10,6 @@ class NonAmortizedLoan implements CalculatorInterface
 {
     public function estimateInterestAmount(Contract $contract, Carbon $to): int
     {
-        $term = $contract->loanTerm;
-        $total = (($term->apr/100)*$contract->amount/52)*$contract->length;
-        $transfered = $contract->transactions()->where('type', Transaction::TYPE_INTEREST)->sum('amount');
-        return $total - $transfered;
+        return ($contract->amount * ($contract->loanTerm->apr / 100) / 52);
     }
 }

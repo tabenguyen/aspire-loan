@@ -17,9 +17,7 @@ class CreateTransactions extends Migration
             $table->id();
             $table->integer('user_id')->unsigned();
             $table->morphs('target');
-            $table->integer('target_before');
             $table->integer('amount');
-            $table->integer('target_after');
             $table->string('type', 10);
             $table->timestamps();
         });

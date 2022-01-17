@@ -14,4 +14,7 @@ class Transaction extends Model
 
     use HasFactory;
     use HasCreator;
+
+    protected $fillable = ['user_id', 'target_id', 'target_type', 'amount', 'type'];
+
 }

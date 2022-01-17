@@ -24,8 +24,42 @@ class Contract extends Model
         return $this->belongsTo(LoanTerm::class);
     }
 
-    public function transactions()
+    public function repayments(): HasMany
     {
-        return $this->morphMany(Transaction::class, 'target');
+        return $this->hasMany(Repayment::class);
+    }
+
+    public function getRepaymentAmount(): int
+    {
+        return (int)round($this->amount / $this->loanTerm->length, PHP_ROUND_HALF_UP);
+    }
+
+    public function sumTransaction(string $type = null)
+    {
+        $paid = 0;
+        $this->repayments->map(function($repayment) use(&$paid, $type) {
+            $qb = $repayment->transactions();
+            if (!empty($type)) {
+                $qb->where('type', $type);
+            }
+            $paid += $qb->sum('amount');
+        });
+
+        return $paid;
+    }
+
+    public function getRepaymentPaid(): int
+    {
+        return $this->sumTransaction(Transaction::TYPE_REPAYMENT);
+    }
+
+    public function getBalance(): int
+    {
+        return $this->amount - $this->getRepaymentPaid();
+    }
+
+    public function getRepaymentPerPay(): int
+    {
+        return (int)round($this->amount / $this->loanTerm->length, PHP_ROUND_HALF_UP);
     }
 }

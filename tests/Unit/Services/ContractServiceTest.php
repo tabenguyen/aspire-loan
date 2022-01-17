@@ -47,24 +47,41 @@ class ContractServiceTest extends TestCase
      *
      * @return void
      */
-    public function test_getCurrentStatus_success($contract)
+    public function test_getCurrentStatus_amor_success($contract)
     {
         $user = User::factory()->create();
         $term = LoanTerm::factory()->create([
             'apr' => 52,
             'fee' => 1000,
-            'interest_type' => 0,
+            'interest_type' => LoanTerm::INTEREST_TYPE_AMOR,
             'length' => 6,
         ]);
         $contract = $this->service->apply($user->id, $term->id, 100000, Carbon::now()->subWeek(5));
-        $status = $this->service->getCurrentStatus($contract, Carbon::now());
-        $this->assertArrayHasKey('weekNo', $status);
-        $this->assertArrayHasKey('debtAmount', $status);
-        $this->assertArrayHasKey('fee', $status);
-        $this->assertArrayHasKey('interest', $status);
-        $this->assertEquals($status['weekNo'], 5);
-        $this->assertEquals($status['debtAmount'], 100000);
-        $this->assertEquals($status['fee'], 1000);
-        $this->assertEquals($status['interest'], 1000);
+        $status = $this->service->getContractStatus($contract, Carbon::now());
+        $this->assertEquals($status->getDebtAmount(), 100000);
+        $this->assertEquals($status->getFee(), 1000);
+        $this->assertEquals($status->getInterest(), 1000);
+    }
+
+
+    /**
+     * @depends test_apply
+     *
+     * @return void
+     */
+    public function test_getCurrentStatus_nonamor_success($contract)
+    {
+        $user = User::factory()->create();
+        $term = LoanTerm::factory()->create([
+            'apr' => 52,
+            'fee' => 1000,
+            'interest_type' => LoanTerm::INTEREST_TYPE_NON_AMOR,
+            'length' => 6,
+        ]);
+        $contract = $this->service->apply($user->id, $term->id, 100000, Carbon::now()->subWeek(5));
+        $status = $this->service->getContractStatus($contract, Carbon::now());
+        $this->assertEquals($status->getDebtAmount(), 100000);
+        $this->assertEquals($status->getFee(), 1000);
+        $this->assertEquals($status->getInterest(), 1000);
     }
 }

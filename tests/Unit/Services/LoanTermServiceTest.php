@@ -27,16 +27,6 @@ class LoanTermServiceTest extends TestCase
         $this->service = app(LoanTermService::class);
     }
 
-    public function test_get_all()
-    {
-        $qb = $this->service->getAll();
-        $this->assertEquals(0, $qb->count());
-        LoanTerm::factory()->count(20)->create();
-        $this->assertEquals(20, $qb->count());
-        $ids = $qb->pluck('id');
-        $this->assertTrue($ids->first() < $ids->last());
-    }
-
     public function test_create_term_success()
     {
         $term = $this->service->createTerm([

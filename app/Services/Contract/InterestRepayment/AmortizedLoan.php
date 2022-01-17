@@ -10,10 +10,6 @@ class AmortizedLoan implements CalculatorInterface
 {
     public function estimateInterestAmount(Contract $contract, Carbon $to): int
     {
-        $term = $contract->loanTerm;
-        $repaymentTotal = $contract->transactions()->where('type', Transaction::TYPE_REPAYMENT)->sum('amount');
-        $repaymentRemain = $contract->amount - $repaymentTotal;
-
-        return ($repaymentRemain * ($term->apr / 100) / 52);
+        return ($contract->getBalance() * ($contract->loanTerm->apr / 100) / 52);
     }
 }

@@ -16,11 +16,10 @@ class CreateRepayments extends Migration
         Schema::create('repayments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('loan_term_id')->constrained();
-            $table->foreignId('transaction_id')->constrained();
+            $table->foreignId('contract_id')->constrained();
             $table->integer('amount');
-            $table->integer('interest');
-            $table->integer('fee');
+            $table->integer('target_before');
+            $table->integer('target_after');
             $table->timestamps();
         });
     }
