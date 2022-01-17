@@ -25,7 +25,6 @@ class CreatePayRequest extends FormRequest
     {
         return [
             'contract_id' => 'required|integer',
-            'user_id' => 'required|integer',
             'amount' => 'required|integer',
         ];
     }

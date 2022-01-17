@@ -1,0 +1,403 @@
+{
+	"info": {
+		"_postman_id": "56f5049f-c95a-446a-afec-180b3a3b4a1a",
+		"name": "Aspire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "suppervisor@aspire.examlple",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "suppervisor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/api/login",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Me",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "24|ZFq0ZO1qWOq7V99Gn0I7nE5B306Wny7JPOsM2cV9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/me",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My contracts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "24|ZFq0ZO1qWOq7V99Gn0I7nE5B306Wny7JPOsM2cV9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/me/contracts",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"me",
+						"contracts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Terms",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "24|ZFq0ZO1qWOq7V99Gn0I7nE5B306Wny7JPOsM2cV9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{HOST}}/api/loan-terms",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-terms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|QAIFKIbiQsly2Kjv08Yyr3ZWzs8ScUYXbC8AsVcN",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/contracts/1/status",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract repayment history",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|QAIFKIbiQsly2Kjv08Yyr3ZWzs8ScUYXbC8AsVcN",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{HOST}}/api/contracts/1/status",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit a repayment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|QAIFKIbiQsly2Kjv08Yyr3ZWzs8ScUYXbC8AsVcN",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contract_id\": 1,\n    \"amount\": 73\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/api/contracts/1/pay",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"contracts",
+						"1",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contract [CREATE]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|QAIFKIbiQsly2Kjv08Yyr3ZWzs8ScUYXbC8AsVcN",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_id\": 2,\n    \"loan_term_id\": 1,\n    \"amount\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/api/me/contracts",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"me",
+						"contracts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Term [CREATE]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "24|ZFq0ZO1qWOq7V99Gn0I7nE5B306Wny7JPOsM2cV9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"apr\": 52,\n    \"length\": 20,\n    \"interest_type\": 1,\n    \"fee\": 1000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/api/loan-terms",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"api",
+						"loan-terms"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "HOST",
+			"value": "http://localhost:8080"
+		},
+		{
+			"value": ""
+		}
+	]
+}
