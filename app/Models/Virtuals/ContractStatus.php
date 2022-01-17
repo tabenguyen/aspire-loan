@@ -7,11 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContractStatus
 {
-    private int $weekNo;
     private int $debtAmount;
     private int $repaymentAmount;
     private int $fee;
     private int $interest;
+
+    // public function toArray(): array
+    // {
+    //     return [
+    //         'debtAmount' => $this->debtAmount,
+    //         'repaymentAmount' => $this->repaymentAmount,
+    //         'fee' => $this->fee,
+    //         'interest' => $this->interest,
+    //     ];
+    // }
 
     /**
      * Get the value of debtAmount

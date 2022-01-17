@@ -18,7 +18,7 @@ class CreateTableContracts extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('loan_term_id')->unsigned();
             $table->integer('amount');
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             $table->integer('status');
             $table->timestamps();
         });

@@ -18,8 +18,12 @@ use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ContractService
+class ContractService extends BaseService
 {
+    public function createQueryBuilder()
+    {
+        return Contract::query();
+    }
     /**
      * Get processor base on type of interest
      *
@@ -63,7 +67,7 @@ class ContractService
     }
 
     /**
-     * Retreive current status of a contract
+     * Retreive current status of a conztract
      *
      * @param Contract $contract
      * @param Carbon $to
@@ -151,4 +155,15 @@ class ContractService
         }
         return false;
     }
+
+    public function approve(Contract $contract): Contract
+    {
+        $contract->start_date = Carbon::now();
+        $contract->status = Contract::STATUS_ACTIVE;
+        $contract->save();
+
+        return $contract;
+    }
+
+
 }
